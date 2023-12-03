@@ -1,0 +1,44 @@
+type Query {
+    users: [User]
+    tasks: [Task]
+    findTaskById(id: ID): Task
+}
+
+type Mutation{
+    addTask(task: TaskInput): Task
+    addUser(user: UserInput): User
+}
+
+input TaskInput {
+    title: String!
+    description: String
+    status: String
+    userId: ID!
+}
+
+input UserInput {
+   name: String!
+   email: String
+}
+
+
+type User {
+    id: ID!
+    name: String!
+    email: String
+    tasks: [Task]
+}
+
+type Task {
+    id: ID!
+    title: String!
+    description: String
+    status: Status
+    user: User
+}
+
+enum Status {
+     WORKING,
+     CLOSED,
+     CANCELED
+}
