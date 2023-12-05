@@ -1,15 +1,15 @@
 package com.example.GraphQL_demo.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "task")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

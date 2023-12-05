@@ -1,0 +1,12 @@
+query UserDetails{
+  findUserById(id:"1"){
+    name,
+    email,
+    tasks {
+          id
+          title
+          description
+          status
+        }
+  }
+}

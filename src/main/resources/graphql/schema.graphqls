@@ -2,6 +2,7 @@ type Query {
     users: [User]
     tasks: [Task]
     findTaskById(id: ID): Task
+    findUserById(id: ID): User
 }
 
 type Mutation{
