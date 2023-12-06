@@ -14,9 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @GraphQlTest(UserController.class)
 class UserControllerTest {
@@ -29,7 +28,24 @@ class UserControllerTest {
 
 
     @Test
-    void users() {
+    void testShowAllUsers() {
+        User expectedUser1 = new User("Name", "Email");
+        User expectedUser2 = new User("Name 2", "Email");
+        List<User> expectedUsers = new ArrayList<>(List.of(expectedUser1, expectedUser2));
+        String query = "{ users {name, email} }";
+
+        when(userRepository.findAll()).thenReturn(expectedUsers);
+
+
+        List<User> actualUsers = graphQlTest.document(query)
+                .execute()
+                .path("users[*]")
+                .entityList(User.class)
+                .get();
+
+        assertTrue(actualUsers.size() > 1);
+        assertEquals(expectedUser1.getName(), actualUsers.get(0).getName());
+        assertEquals(expectedUser2.getName(), actualUsers.get(1).getName());
     }
 
     @Test
@@ -85,6 +101,21 @@ class UserControllerTest {
     }
 
     @Test
-    void addUser() {
+    void testAddUser() {
+        String name = "Name";
+        String email = "Email";
+        User expectedUser = new User("Name", "Email");
+
+
+        String pathName = "addUser";
+        String query = String.format("mutation { addUser(user: {name: \"%s\", email: \"%s\"}) {name, email} }", name, email);
+
+        when(userRepository.save(any())).thenReturn(expectedUser);
+
+        User user = graphQlTest.document(query).execute().path(pathName).entity(User.class).get();
+
+        assertNotNull(user);
+        assertEquals(user.getName(), name);
+        assertEquals(user.getEmail(),email);
     }
 }
