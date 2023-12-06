@@ -3,6 +3,7 @@ type Query {
     tasks: [Task]
     findTaskById(id: ID): Task
     findUserById(id: ID): User
+    findAllUsersPageable(size: Int, page: Int)
 }
 
 type Mutation{
@@ -36,6 +37,11 @@ type Task {
     description: String
     status: Status
     user: User
+}
+
+input UserFilter{
+    name: FilterFiled
+    email: FilterFiled
 }
 
 enum Status {
